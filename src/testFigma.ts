@@ -2,7 +2,9 @@ import dotenv from 'dotenv'
 import { fetchFigmaFile } from './figmaClient.js'
 import { findFrame } from './utils/findTargetFrame.js'
 import { extractText } from './utils/extractText.js'
+import { extractFrames } from './utils/extractFrames.js'
 import fs from 'fs'
+import { mapToFrames } from './utils/mapToFrames.js'
 
 dotenv.config()
 
@@ -34,10 +36,13 @@ const main = async () => {
     process.exit(1)
   }
   
-  const screen = findFrame(root, 'Sign in screen')    
-  console.log('target frame:', JSON.stringify(screen, null, 2))  
+  // const screen = findFrame(root, 'Sign in screen')    
+  // console.log('target frame:', JSON.stringify(screen, null, 2))  
   const texts = extractText(root)
-  console.log(JSON.stringify(texts, null, 2))
+  // console.log(JSON.stringify(texts, null,))
+  const frames = extractFrames(root)
+  const mapping = mapToFrames(frames, texts)
+  console.log(mapping)
 }
 
 main().catch((err) => {

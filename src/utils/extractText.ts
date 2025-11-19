@@ -1,4 +1,22 @@
-export const extractText = (node: any, results: any[] = []) => {
+export interface TextStyle {
+  fontSize: number
+  fontWeight: number
+  fontFamily: string
+  color: {r: number; g:number; b: number; a: number}
+  letterSpacing: number
+  lineHeightPx: number
+}
+
+export interface TextNode {
+  id: string
+  type: string
+  text: string
+  position: {x: number; y:number}
+  size: {width: number; height: number}
+  style: TextStyle
+}
+
+export const extractText = (node: any, results: TextNode[] = []) => {
   if(!node) return results
 
   if(node.type === 'TEXT' && node.characters) {
