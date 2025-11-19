@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gen:html": "ts-node-esm src/generator/buildHtmlFile.ts"
+    "gen:html": "node --loader ts-node/esm src/generator/buildHtmlFile.ts"
   },
   "keywords": [],
   "author": "",

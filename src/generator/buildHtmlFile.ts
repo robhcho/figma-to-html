@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { buildHtml } from './buildHtml.js'
+import { buildCss } from './buildCss.js'
 import { extractText } from '../utils/extractText.js'
 
 const CACHE_PATH = './figmaCache.json'
@@ -20,8 +21,7 @@ const main = () => {
   // write index.html
   fs.writeFileSync(OUTPUT_HTML, html)
   
-  // empty css file (will fill in later)
-  if(!fs.existsSync(OUTPUT_CSS)) fs.writeFileSync(OUTPUT_CSS, '/* styles generated later */')
+  const css = buildCss(textNodes)
 }
 
 main()
