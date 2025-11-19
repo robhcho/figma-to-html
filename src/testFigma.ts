@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import { fetchFigmaFile } from './figmaClient.js'
 import { findFrame } from './utils/findTargetFrame.js'
+import { extractText } from './utils/extractText.js'
 import fs from 'fs'
 
 dotenv.config()
@@ -25,9 +26,18 @@ const main = async () => {
     fs.writeFileSync(CACHE_PATH, JSON.stringify(fileData, null, 2))
     console.log('cached figma data')
   }
-  const screen = findFrame(fileData.document, 'Sign in screen')    
-  console.log('target frame:', JSON.stringify(screen, null, 2))
+
+  const root = fileData.nodes["0:0"].document
+  if(!root) {
+    console.error('could not find root')
+    console.log('available keys:', Object.keys(fileData))
+    process.exit(1)
+  }
   
+  const screen = findFrame(root, 'Sign in screen')    
+  console.log('target frame:', JSON.stringify(screen, null, 2))  
+  const texts = extractText(root)
+  console.log(JSON.stringify(texts, null, 2))
 }
 
 main().catch((err) => {
