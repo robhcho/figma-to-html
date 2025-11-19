@@ -5,6 +5,7 @@ import { buildCss } from './buildCss.js'
 import { extractText } from '../utils/extractText.js'
 import { extractFrames } from '../utils/extractFrames.js'
 import { mapToFrames, type PositionedNode } from '../utils/mapToFrames.js'
+import { extractRect } from '../utils/extractRect.js'
 
 const CACHE_PATH = './figmaCache.json'
 const OUTPUT_DIR = './output'
@@ -17,18 +18,17 @@ const main = () => {
 
   const frames = extractFrames(root).filter(f => f.size.width * f.size.height > 10000)
   const textNodes = extractText(root)
-  const frameMap = mapToFrames(frames, textNodes)
+  const rectNodes= extractRect(root)
+  const frameMap = mapToFrames(frames, textNodes, rectNodes)
   
   const html = buildHtml(frames, frameMap)
 
   if(!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR)
 
   // write index.html
-  fs.writeFileSync(OUTPUT_HTML, html)
-
-  const positionedTextNodes: PositionedNode[] = Object.values(frameMap).flat()
+  fs.writeFileSync(OUTPUT_HTML, html)  
   
-  const css = buildCss(frames, positionedTextNodes)
+  const css = buildCss(frames, frameMap)
 }
 
 main()

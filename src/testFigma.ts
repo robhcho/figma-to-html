@@ -41,8 +41,8 @@ const main = async () => {
   const texts = extractText(root)
   // console.log(JSON.stringify(texts, null,))
   const frames = extractFrames(root)
-  const mapping = mapToFrames(frames, texts)
-  console.log(mapping)
+  // const mapping = mapToFrames(frames, texts)
+  // console.log(mapping)
 }
 
 main().catch((err) => {

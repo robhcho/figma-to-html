@@ -1,11 +1,11 @@
 import type { FrameNode } from "../utils/extractFrames.js"
 import type { TextNode } from "../utils/extractText.js"
-import type { PositionedNode } from "../utils/mapToFrames.js"
+import type { PositionedNode, PositionedRect, PositionedText } from "../utils/mapToFrames.js"
 import { safeId } from "../utils/safeId.js"
 
 export const buildHtml = (
   frames: FrameNode[],
-  frameMap: Record<string, PositionedNode[]>
+  frameMap: Record<string, {texts: PositionedText[], rects: PositionedRect[]}>
 ) => {
   const html = []
 
@@ -23,7 +23,12 @@ export const buildHtml = (
     for(const frame of frames) {
       html.push(`<div class='frame-${safeId(frame.id)}'>`)      
       
-      for(const text of frameMap[frame.id] || []) {
+      const group = frameMap[frame.id] ?? {texts: [], rects: []}
+      
+      for(const rect of group.rects) {
+        html.push(`<div class='rect-${safeId(rect.id)}'></div>`)
+      }
+      for(const text of group.texts) {
         html.push(`
           <div class='text-${safeId(text.id)}'>
             ${text.text}
