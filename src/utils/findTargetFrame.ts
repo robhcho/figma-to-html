@@ -1,5 +1,6 @@
 export const findFrame = (node: any, name: string): any | null => {
-  if (node.name === name) return node
+  if(!node || typeof node !== 'object') return null
+  if (node.type === 'FRAME' && node.name === name) return node
 
   if (!node.children) return null
 

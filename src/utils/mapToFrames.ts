@@ -1,8 +1,12 @@
 import type { FrameNode } from "./extractFrames.js";
 import type { TextNode } from "./extractText.js";
 
+export type PositionedNode = TextNode & {
+  relative: {x: number; y: number}
+}
+
 export const mapToFrames = (frames: FrameNode[], texts: TextNode[]) => {
-  const frameMap: Record<string, TextNode[]> = {}
+  const frameMap: Record<string, PositionedNode[]> = {}
 
   for(const frame of frames) {
     frameMap[frame.id] = []
@@ -24,11 +28,22 @@ export const mapToFrames = (frames: FrameNode[], texts: TextNode[]) => {
   }
 
   for(const text of texts) {
-    for (const frame of frames) {
-      if(contains(frame, text)) {
-        frameMap[frame.id]?.push(text)
+    const prospects = frames.filter(frame => contains(frame, text))
+    if(prospects.length === 0) continue
+
+    const closestParent = prospects.reduce((a,b) => {
+      const aArea = a.size.width * a.size.height
+      const bArea = b.size.width * b.size.height
+      return bArea < aArea ? a : b
+    })
+    
+    frameMap[closestParent.id]?.push({
+      ...text,
+      relative: {
+        x: text.position.x - closestParent.position.x,
+        y: text.position.y - closestParent.position.y,
       }
-    }
+    })
   }
 
   return frameMap

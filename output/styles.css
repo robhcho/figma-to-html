@@ -1,75 +1,125 @@
 
     body {position: relative; font-family: Inter, sans-serif;}
 
-  .text-1:112 {
-position: absolute; 
+    .screen {position: relative; width: 393px; height: 852px; overflow: hidden; margin: 0 auto;}
+
+  .frame-1_75 {
+ position: absolute;
+ left: -1.1368683772161603e-13px;
+ top: 0px;
+ width: 393px;
+ height: 852px;
+}
+
+.frame-1_114 {
+ position: absolute;
  left: 32px;
+ top: 252px;
+ width: 329px;
+ height: 117px;
+}
+
+.frame-1_115 {
+ position: absolute;
+ left: 32px;
+ top: 252px;
+ width: 329px;
+ height: 58px;
+}
+
+.frame-1_117 {
+ position: absolute;
+ left: 32px;
+ top: 310px;
+ width: 329px;
+ height: 59px;
+}
+
+.frame-1_120 {
+ position: absolute;
+ left: 16px;
+ top: 662px;
+ width: 361px;
+ height: 46px;
+}
+
+.frame-1_125 {
+ position: absolute;
+ left: 16px;
+ top: 720px;
+ width: 361px;
+ height: 46px;
+}
+
+.text-1_112 {
+position: absolute; 
+ left: 32.000000000000114px;
  top: 170px;
 font-size: 48px;
 font-weight: 700;
 font-family: Inter, sans-serif;
 letter-spacing: -0.96px;
 line-height: 57.60000228881836px;
-color: rgba[object Object];
+color: rgba(54, 51, 65, 1);
 }
 
-.text-1:116 {
+.text-1_116 {
 position: absolute; 
- left: 48px;
+ left: 48.000000000000114px;
  top: 272px;
 font-size: 15px;
 font-weight: 500;
 font-family: Inter, sans-serif;
 letter-spacing: -0.3px;
 line-height: 18px;
-color: rgba[object Object];
+color: rgba(54, 51, 65, 1);
 }
 
-.text-1:118 {
+.text-1_118 {
 position: absolute; 
- left: 48px;
+ left: 48.000000000000114px;
  top: 330.5px;
 font-size: 15px;
 font-weight: 500;
 font-family: Inter, sans-serif;
 letter-spacing: -0.3px;
 line-height: 18px;
-color: rgba[object Object];
+color: rgba(192, 192, 192, 1);
 }
 
-.text-1:123 {
+.text-1_123 {
 position: absolute; 
- left: 172px;
+ left: 172.0000000000001px;
  top: 674px;
 font-size: 15px;
 font-weight: 600;
 font-family: Inter, sans-serif;
 letter-spacing: -0.15px;
 line-height: 22px;
-color: rgba[object Object];
+color: rgba(255, 255, 255, 1);
 }
 
-.text-1:126 {
+.text-1_126 {
 position: absolute; 
- left: 141.5px;
+ left: 141.5000000000001px;
  top: 732px;
 font-size: 15px;
 font-weight: 600;
 font-family: Inter, sans-serif;
 letter-spacing: -0.15px;
 line-height: 22px;
-color: rgba[object Object];
+color: rgba(54, 51, 65, 1);
 }
 
-.text-1:127 {
+.text-1_127 {
 position: absolute; 
- left: 16px;
+ left: 16.000000000000114px;
  top: 778px;
 font-size: 13px;
 font-weight: 500;
 font-family: Inter, sans-serif;
 letter-spacing: -0.26px;
 line-height: 15.600000381469727px;
-color: rgba[object Object];
+color: rgba(54, 51, 65, 1);
 }
 

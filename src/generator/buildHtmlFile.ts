@@ -3,6 +3,8 @@ import path from 'path'
 import { buildHtml } from './buildHtml.js'
 import { buildCss } from './buildCss.js'
 import { extractText } from '../utils/extractText.js'
+import { extractFrames } from '../utils/extractFrames.js'
+import { mapToFrames, type PositionedNode } from '../utils/mapToFrames.js'
 
 const CACHE_PATH = './figmaCache.json'
 const OUTPUT_DIR = './output'
@@ -13,15 +15,20 @@ const main = () => {
   const raw = JSON.parse(fs.readFileSync(CACHE_PATH, 'utf-8'))
   const root = raw.nodes['0:0'].document.children[0]
 
+  const frames = extractFrames(root).filter(f => f.size.width * f.size.height > 10000)
   const textNodes = extractText(root)
-  const html = buildHtml(textNodes)
+  const frameMap = mapToFrames(frames, textNodes)
+  
+  const html = buildHtml(frames, frameMap)
 
   if(!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR)
 
   // write index.html
   fs.writeFileSync(OUTPUT_HTML, html)
+
+  const positionedTextNodes: PositionedNode[] = Object.values(frameMap).flat()
   
-  const css = buildCss(textNodes)
+  const css = buildCss(frames, positionedTextNodes)
 }
 
 main()
