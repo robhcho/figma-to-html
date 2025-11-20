@@ -5,6 +5,10 @@ export interface TextStyle {
   color: {r: number; g:number; b: number; a: number}
   letterSpacing: number
   lineHeightPx: number
+  textAlign: string
+  textVerticalAlign: string
+  textDecoration: string
+  textCase: string
 }
 
 export interface TextNode {
@@ -35,7 +39,11 @@ export const extractText = (node: any, results: TextNode[] = []) => {
         fontFamily: style.fontFamily,
         color: node.fills?.[0]?.color || null,
         letterSpacing: style.letterSpacing,
-        lineHeightPx: style.lineHeightPx
+        lineHeightPx: style.lineHeightPx,
+        textAlign: style.textAlignHorizontal,
+        textVerticalAlign: style.textAlignVertical,
+        textDecoration: style.textDecoration,
+        textCase: style.textCase
       }
     })
   }

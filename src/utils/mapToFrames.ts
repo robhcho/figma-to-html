@@ -14,47 +14,52 @@ export const mapToFrames = (frames: FrameNode[], texts: TextNode[], rects: RectN
     frameMap[frame.id] = {texts: [], rects: []}
   }
 
-  const contains = (frame:FrameNode, node: {position: {x: number; y: number}}): boolean => {
-    const {x,y} = node.position
-    const fx = frame.position.x
-    const fy = frame.position.y
-    const fw = frame.size.width
-    const fh = frame.size.height
-
-    return (
-      x >= fx &&
-      x <= fx + fw &&
-      y >= fy &&
-      y <= fy + fh
-    )
-  }
-
-  const assign = <T extends TextNode | RectNode>(
-    nodes: T[],
-    pushFn: (id: string, node: T & {relative: {x: number; y: number}}) => void
-  ) => {
-    for(const node of nodes) {
-      const prospects = frames.filter(frame => contains(frame, node))
-      if(prospects.length === 0) continue
-  
-      const closestParent = prospects.reduce((a,b) => {
-        const aArea = a.size.width * a.size.height
-        const bArea = b.size.width * b.size.height
-        return bArea < aArea ? a : b
-      })
-      
-      pushFn(closestParent.id, {
-        ...node,
-        relative: {
-          x: node.position.x - closestParent.position.x,
-          y: node.position.y - closestParent.position.y,
-        }
-      })
+  const findParentFrame = (node: {position: {x: number; y: number}} & {id: string}) => {
+    // direct parent-frame match from list of frame.children
+    for (const f of frames) {
+      if(f.children?.includes(node.id)) return f
     }
+    
+    for(const f of frames) {
+      const {x,y} = node.position
+      const fx = f.position.x
+      const fy = f.position.y
+      const fw = f.size.width
+      const fh = f.size.height
+  
+      if (
+        x >= fx &&
+        x <= fx + fw &&
+        y >= fy &&
+        y <= fy + fh
+      ) return f
+    }
+    return null
   }
 
-  assign(texts, (id, node) => frameMap[id]?.texts.push(node))
-  assign(rects, (id, node) => frameMap[id]?.rects.push(node))
+  const pushWithRelative = (
+    f: FrameNode,
+    node: any
+  ) => {
+    const rel = {
+      x: node.position.x - f.position.x,
+      y: node.position.y - f.position.y,
+    }
+    const withRelative = {...node, relative: rel}
+
+    if ('text' in node) frameMap[f.id]?.texts.push(withRelative)
+    else frameMap[f.id]?.rects.push(withRelative)
+  }
+
+  for(const t of texts) {
+    const p = findParentFrame(t)
+    if(p) pushWithRelative(p,t)
+  }
+
+  for(const r of rects) {
+    const p = findParentFrame(r)
+    if(p) pushWithRelative(p,r)
+  }
 
   return frameMap
  }

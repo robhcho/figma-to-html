@@ -7,6 +7,34 @@ export const buildHtml = (
   frames: FrameNode[],
   frameMap: Record<string, {texts: PositionedText[], rects: PositionedRect[]}>
 ) => {
+  const topFrames = frames.filter(f => {
+    return !frames.some(parent => parent.children.includes(f.id))
+  })
+  
+  const renderFrame = (frame: FrameNode): string => {
+    let html = `<div class='frame-${safeId(frame.id)}'>\n`
+    const group = frameMap[frame.id] ?? {texts: [], rects: []}
+
+    // rect children
+    for(const rect of group.rects) {
+      html+= `<div class='rect-${safeId(rect.id)}'></div>\n`
+    }
+
+    // text children
+    for(const text of group.texts) {
+      html += `<div class='text-${safeId(text.id)}'>${text.text}</div>\n`
+    }
+
+    // frame children
+    for(const childId of frame.children) {
+      const child = frames.find(f => f.id === childId)
+      if(child) html += renderFrame(child)
+    }
+
+    html += `</div>\n`
+    return html
+  }
+  
   const html = []
 
   html.push(`
@@ -20,23 +48,10 @@ export const buildHtml = (
       <body>
         <div class='screen'>
   `)
-    for(const frame of frames) {
-      html.push(`<div class='frame-${safeId(frame.id)}'>`)      
-      
-      const group = frameMap[frame.id] ?? {texts: [], rects: []}
-      
-      for(const rect of group.rects) {
-        html.push(`<div class='rect-${safeId(rect.id)}'></div>`)
-      }
-      for(const text of group.texts) {
-        html.push(`
-          <div class='text-${safeId(text.id)}'>
-            ${text.text}
-          </div>
-        `)
-      }
-      html.push(`</div>\n`)
-    }
+    
+    for(const frame of topFrames) {
+      html.push(renderFrame(frame))      
+    }  
     
   html.push(`
         </div>        

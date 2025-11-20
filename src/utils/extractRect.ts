@@ -5,15 +5,30 @@ export interface RectNode {
   position: {x: number; y: number}
   size: {width: number; height: number}
   fills: any[]
-  cornerRadius: number
+  cornerRadius?: number
+  rectangleCornerRadii?: number[]
   stroke: {color: any; weight: number} | null
+  opacity?: number
+  blendMode: string | null
+  gradient: any | null
+  effects?: any[]
 }
 
 export const extractRect = (node: any, results: RectNode[] = []) => {
   if(!node) return results
   
-  if(node.type === 'RECTANGLE') {
+  if(
+    node.type === 'RECTANGLE' ||
+    node.type === 'VECTOR' ||
+    node.type === 'LINE' 
+  ) {
     const {x, y, width, height} = node.absoluteBoundingBox || {}
+    const fills = Array.isArray(node.fills) ? node.fills : []
+    const firstFill = fills[0] || null
+
+    const hasGradient = firstFill && typeof firstFill.type === 'string' &&
+      firstFill.type.startsWith('GRADIENT')
+    
     results.push({
       id: node.id,
       type: 'RECTANGLE',
@@ -22,7 +37,12 @@ export const extractRect = (node: any, results: RectNode[] = []) => {
       size: {width, height},
       fills: node.fills || [],
       cornerRadius: node.cornerRadius,
-      stroke: node.strokes[0] ? { color: node.strokes[0].color, weight: node.strokeWeight } : null
+      rectangleCornerRadii: node.rectangleCornerRadii,
+      stroke: node.strokes[0] ? { color: node.strokes[0].color, weight: node.strokeWeight } : null,
+      opacity: node.opacity ?? 1,
+      blendMode: node.blendMode ?? null,
+      gradient: hasGradient ? firstFill : null,
+      effects: node.effects || [],
     })
   }
 
